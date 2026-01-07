@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useCart } from '../context/CartContext.jsx'
 
 function ProductCard({ product }) {
   const { addToCart } = useCart()
 
   return (
-    <article className="product-card">
+    <motion.article
+      className="product-card"
+      whileHover={{ y: -6, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.22)', borderColor: '#cbd5f1' }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+    >
       <Link to={`/product/${product.id}`} className="product-image-wrap">
         <img src={product.image} alt={product.name} className="product-image" loading="lazy" />
       </Link>
@@ -32,7 +38,7 @@ function ProductCard({ product }) {
           </Link>
         </div>
       </div>
-    </article>
+    </motion.article>
   )
 }
 
