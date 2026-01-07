@@ -1,16 +1,25 @@
-import { Link } from 'react-router-dom'
-import { FaShoppingCart } from 'react-icons/fa'
-import { useCart } from '../context/CartContext.jsx'
+import { Link } from 'react-router-dom';
+import { FaShoppingCart } from 'react-icons/fa';
+import { useCart } from '../context/CartContext.jsx';
 
 function CartIcon() {
-  const { cartCount } = useCart()
+  const { cartCount } = useCart();
 
   return (
-    <Link to="/cart" className="cart-icon" aria-label="Cart">
-      <FaShoppingCart />
-      {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+    <Link
+      to="/cart"
+      className="relative p-2.5 rounded-xl hover:bg-[#A0C878]/10 transition-all duration-300 group"
+      aria-label={`View cart (${cartCount} items)`}
+    >
+      <FaShoppingCart className="text-2xl md:text-3xl text-gray-800 group-hover:text-[#A0C878] transition-colors duration-300" />
+
+      {cartCount > 0 && (
+        <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 bg-[#A0C878] text-white text-xs font-bold rounded-full px-1 shadow-lg animate-pulse">
+          {cartCount > 99 ? '99+' : cartCount}
+        </span>
+      )}
     </Link>
-  )
+  );
 }
 
-export default CartIcon
+export default CartIcon;

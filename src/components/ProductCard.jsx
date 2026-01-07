@@ -1,45 +1,97 @@
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { useCart } from '../context/CartContext.jsx'
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useCart } from '../context/CartContext.jsx';
 
 function ProductCard({ product }) {
-  const { addToCart } = useCart()
+  const { addToCart } = useCart();
+
+  const handleAddToCart = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product.id, 1);
+  };
 
   return (
     <motion.article
-      className="product-card"
-      whileHover={{ y: -6, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.22)', borderColor: '#cbd5f1' }}
+      className="group relative h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden transition-all duration-500 flex flex-col"
+      whileHover={{ y: -10, scale: 1.03 }}
       whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.18, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
-      <Link to={`/product/${product.id}`} className="product-image-wrap">
-        <img src={product.image} alt={product.name} className="product-image" loading="lazy" />
-      </Link>
-      <div className="product-body">
-        <div className="product-meta">
-          <span className="product-category">{product.category}</span>
-        </div>
-        <h3 className="product-title">
-          <Link to={`/product/${product.id}`}>{product.name}</Link>
-        </h3>
-        <p className="product-price">${product.price.toFixed(2)}</p>
-        <div className="product-actions">
+      {/* Image Section - Fixed Aspect Ratio */}
+      <Link to={`/product/${product.id}`} className="block shrink-0">
+        <div className="relative aspect-square overflow-hidden bg-linear-to-br from-gray-50 to-gray-100">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+          {/* Quick Add on Hover (Desktop only) */}
           <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => {
-              addToCart(product.id, 1)
-            }}
+            onClick={handleAddToCart}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 translate-y-6 group-hover:translate-y-0 transition-all duration-400 px-2.5 py-2 bg-[#A0C878] hover:bg-[#8bb15c] text-white font-medium rounded-md shadow-2xl text-sm hidden sm:block"
+            aria-label={`Quick add ${product.name} to cart`}
           >
-            Add to cart
+            Quick Add to Cart
           </button>
-          <Link to={`/product/${product.id}`} className="btn btn-text">
-            View details
+        </div>
+      </Link>
+
+      {/* Content Section - Takes remaining space */}
+      <div className="p-5 md:p-6 flex flex-col grow justify-between">
+        <div className="space-y-4">
+          {/* Category & Rating */}
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-gray-500 font-medium uppercase tracking-wider">
+              {product.category}
+            </span>
+            {product.rating && (
+              <div className="flex items-center gap-1">
+                <span className="text-yellow-500 text-lg">★</span>
+                <span className="font-semibold text-gray-700">
+                  {product.rating.toFixed(1)}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Product Name */}
+          <h3 className="text-lg md:text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-[#A0C878] transition-colors duration-300">
+            {product.name}
+          </h3>
+
+          {/* Price */}
+          <p className="text-2xl md:text-3xl font-bold text-[#A0C878]">
+            ${product.price.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Buttons - Fixed at bottom, uniform spacing */}
+        <div className="flex flex-col sm:flex-row gap-3 mt-6">
+          <button
+            onClick={handleAddToCart}
+            className="flex-1 py-3.5 bg-[#A0C878] hover:bg-[#8bb15c] text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 text-center"
+          >
+            Add to Cart
+          </button>
+
+          <Link
+            to={`/product/${product.id}`}
+            onClick={e => e.stopPropagation()}
+            className="flex-1 py-3.5 text-center border-2 border-[#A0C878] text-[#A0C878] hover:bg-[#A0C878] hover:text-white font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            View Details
           </Link>
         </div>
       </div>
     </motion.article>
-  )
+  );
 }
 
-export default ProductCard
+export default ProductCard;
