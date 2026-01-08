@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import sos from '../assets/imgs/sos2.png'
 
 function NotFound() {
   const navigate = useNavigate();
@@ -15,14 +16,15 @@ function NotFound() {
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 flex items-center justify-center py-16 px-4">
+    <section className="min-h-screen bg-[#DDEB9D]/50 flex items-center justify-center py-16 px-4">
       <div className="max-w-4xl mx-auto text-center">
-        {/* Optional Illustration – replace with your own SVG/image */}
         <div className="mb-12">
-          <div className="w-64 h-64 mx-auto bg-gray-200 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center text-gray-500">
-            <span className="text-lg">
-              Add cute plant/leaf illustration here 🌿
-            </span>
+          <div className="w-64 h-64 mx-auto bg-[#FAF6E9] border-2 border-dashed border-[#A0C878] rounded-full flex items-center justify-center text-gray-500">
+            <img
+              src={sos}
+              alt="sos"
+              className="flex justify-center items-center w-full h-full"
+            />
           </div>
         </div>
 

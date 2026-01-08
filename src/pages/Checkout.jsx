@@ -41,12 +41,10 @@ function Checkout() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // Real payment integration can go here later
     clearCart();
     navigate('/order-success');
   };
 
-  // Empty Cart State
   if (!items.length) {
     return (
       <section className="py-16 md:py-24 bg-gray-50 min-h-screen">
