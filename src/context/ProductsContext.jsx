@@ -40,8 +40,10 @@ function ProductsProvider({ children }) {
 
   const value = useMemo(() => {
     const getProductById = id => {
-      // string বা number দিয়ে ম্যাচ করবে (loose equality)
-      return products.find(p => p.id == id) ?? null;
+      if (!id) return null;
+      // Convert both to strings for reliable comparison
+      const searchId = String(id);
+      return products.find(p => String(p.id) === searchId) ?? null;
     };
 
     const refresh = async () => {
@@ -60,18 +62,35 @@ function ProductsProvider({ children }) {
     };
 
     const loadProductIfMissing = async id => {
-      // local-এ আছে কি না চেক (loose equality)
-      const existing = products.find(p => p.id == id);
-      if (existing) return existing;
+      if (!id) return null;
+      
+      // Convert id to string for consistent comparison
+      const searchId = String(id);
+      
+      // Check if product exists locally (convert both to strings)
+      const existing = products.find(p => {
+        const productIdStr = String(p.id);
+        return productIdStr === searchId;
+      });
+      
+      if (existing) {
+        return existing;
+      }
 
       try {
-        // API-তে original id (string) পাস করো
+        // Fetch from API using the original id (can be string or number)
         const product = await fetchProductById(id);
 
         if (product) {
           setProducts(prev => {
-            const already = prev.find(p => p.id == product.id);
-            if (already) return prev;
+            const productIdStr = String(product.id);
+            const already = prev.find(p => {
+              const pIdStr = String(p.id);
+              return pIdStr === productIdStr;
+            });
+            if (already) {
+              return prev;
+            }
             return [...prev, product];
           });
         }
