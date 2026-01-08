@@ -28,3 +28,15 @@
 .animate-fadeIn {
   animation: fadeIn 0.8s ease-out;
 }
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-sheetUp {
+  animation: sheetUp 0.35s ease-out;
+}
